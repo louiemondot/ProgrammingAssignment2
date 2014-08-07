@@ -9,15 +9,27 @@
 ## and set by the cacheSolve function.
 
 makeCacheMatrix <- function(x = matrix()) {
-    i <- NULL
+    # initialize variable for inverse cache and set to null
+    i <- NULL   
+    
+    # set function is called when Matrix object initialized
     set <- function(y) {
-        x <<- y
+        x <<- y    
         i <<- NULL
     }
+    
+    # get function returns the matrix itself
     get <- function() x
+    
+    # setinverse assigns to the i variable cache the matrix inverse
     setinverse <- function(inverse) i <<- inverse
+    
+    # getinverse returns the inverse matrix
     getinverse <- function() i
-    list(set = set, get = get,
+    
+    # this list is the object created when makeCacheMatrix is called
+    list(set = set, 
+         get = get,
          setinverse = setinverse,
          getinverse = getinverse)
 }
@@ -30,14 +42,24 @@ makeCacheMatrix <- function(x = matrix()) {
 ## null, the function will return the inverse Matrix from the cache.
 
 cacheSolve <- function(x, ...) {
-    ## Return a matrix that is the inverse of 'x'
+    ## attempt to get inverse matrix of 'x'
     i <- x$getinverse()
+    
+    ## if cache is not null, return inverse matrix and exit function.
     if(!is.null(i)) {
         message("getting cached data")
         return(i)
     }
+    
+    ## if cache is null, get matrix 'x'
     data <- x$get()
+    
+    ## calculate inverse matrix of 'x'
     i <- solve(data, ...)
+    
+    ## store inverse matrix in special matrix object's ('x') cache
     x$setinverse(i)
+    
+    ## return inverse matrix of 'x'
     i    
 }
